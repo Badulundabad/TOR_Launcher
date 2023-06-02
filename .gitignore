@@ -1,0 +1,17 @@
+# Folders
+[Aa]ssets/TextMesh Pro
+[Ll]ibrary
+[Ll]ogs
+[Oo]bj
+[Tt]emp
+[Uu]serSettings
+
+# Files
+Assets/TextMesh Pro.meta
+
+
+# Visual Studio
+.vs/
+*.vsconfig
+*.csproj
+*.sln
