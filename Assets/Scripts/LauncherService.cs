@@ -199,7 +199,7 @@ public class LauncherService
 
     private void CheckRequiredModules()
     {
-        List<string> missingModules = new List<string>();
+        Dictionary<string, Version> missingModules = new Dictionary<string, Version>();
         foreach (string id in _requiredModuleIDs)
         {
             if (_modules.TryGetValue(id, out SubModule module))
@@ -208,13 +208,16 @@ public class LauncherService
                 {
                     if (!_modules.TryGetValue(dependedModule.Id, out SubModule module2) || module2.Version != dependedModule.Version)
                     {
-                        missingModules.Add($"{id} v{dependedModule.Version}");
+                        if (!missingModules.TryGetValue(id, out Version version))
+                        {
+                            missingModules.Add(id, dependedModule.Version);
+                        }
                     }
                 }
             }
             else
             {
-                missingModules.Add(id);
+                missingModules.Add(id, null);
             }
         }
 
@@ -325,7 +328,7 @@ public class LauncherService
         return new Version(numbers[0], numbers[1], numbers[2]);
     }
 
-    private void ShowWarningPopup(IEnumerable<string> missingModules)
+    private void ShowWarningPopup(Dictionary<string, Version> missingModules)
     {
         if (_view.WarningPopupPrefab)
         {

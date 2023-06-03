@@ -9,14 +9,14 @@ public class WarningPopup
     private WarningPopupView _view;
 
 
-    public WarningPopup(WarningPopupView view, IEnumerable<string> warnings, Action closeCallback)
+    public WarningPopup(WarningPopupView view, Dictionary<string, Version> warnings, Action closeCallback)
     {
         _view = view;
         _view.Init(this);
         _closeCallback = closeCallback;
-        foreach (string warning in warnings)
+        foreach (KeyValuePair<string, Version> kvp in warnings)
         {
-            AddRecord(warning);
+            AddRecord(kvp.Key, kvp.Value);
         }
     }
 
@@ -27,15 +27,15 @@ public class WarningPopup
         _closeCallback?.Invoke();
     }
 
-    private void AddRecord(string warning)
+    private void AddRecord(string module, Version version)
     {
-        if (!string.IsNullOrWhiteSpace(warning) && _view.RecordPrefab)
+        if (!string.IsNullOrWhiteSpace(module) && _view.RecordPrefab)
         {
             GameObject record = GameObject.Instantiate(_view.RecordPrefab, _view.RecordsRoot);
             TMP_Text text = record.GetComponentInChildren<TMP_Text>();
             if (text)
             {
-                text.text = warning;
+                text.text = $"{module} v{version}";
             }
             else
             {
